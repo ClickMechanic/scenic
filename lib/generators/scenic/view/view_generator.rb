@@ -78,7 +78,7 @@ module Scenic
       end
 
       def views_directory_path
-        Rails.root.join(migrations_path.join('../', 'views'))
+        migrations_path.join('../', 'views')
       end
 
       def version_regex
