@@ -24,6 +24,24 @@ describe Scenic::Generators::ViewGenerator, :generator do
       expect(view_definition).to exist
     end
   end
+  
+  context 'with configured migrations path' do
+    around do |example|
+      Scenic.configure { |config| config.migrations_path = 'some/test/' }
+      example.run
+      restore_default_config
+    end
+    
+    it "creates view definition and migration files with the configured path" do
+      migration = file("some/test/create_searches.rb")
+      view_definition = file("some/views/searches_v01.sql")
+
+      run_generator ["search"]
+
+      expect(migration).to be_a_migration
+      expect(view_definition).to exist
+    end
+  end
 
   it "adds 'materialized: true' to the migration if view is materialized" do
     with_view_definition("aired_episodes", 1, "hello") do
@@ -47,5 +65,9 @@ describe Scenic::Generators::ViewGenerator, :generator do
       expect(migration).to be_a_migration
       expect(view_definition).to exist
     end
+  end
+
+  def restore_default_config
+    Scenic.configuration = Scenic::Configuration.new
   end
 end

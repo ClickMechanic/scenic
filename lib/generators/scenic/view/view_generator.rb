@@ -23,17 +23,17 @@ module Scenic
           copy_file previous_definition.full_path, definition.full_path
         end
       end
-
+      
       def create_migration_file
         if creating_new_view? || destroying_initial_view?
           migration_template(
-            "db/migrate/create_view.erb",
-            "db/migrate/create_#{plural_file_name}.rb",
+              "db/migrate/create_view.erb",
+              migrations_path.join("create_#{plural_file_name}.rb"),
           )
         else
           migration_template(
-            "db/migrate/update_view.erb",
-            "db/migrate/update_#{plural_file_name}_to_version_#{version}.rb",
+              "db/migrate/update_view.erb",
+              migrations_path.join("update_#{plural_file_name}_to_version_#{version}.rb"),
           )
         end
       end
@@ -72,9 +72,13 @@ module Scenic
       end
 
       private
+      
+      def migrations_path
+        Pathname.new(Scenic.configuration.migrations_path)
+      end
 
       def views_directory_path
-        @views_directory_path ||= Rails.root.join(*%w(db views))
+        Rails.root.join(migrations_path.join('../', 'views'))
       end
 
       def version_regex
