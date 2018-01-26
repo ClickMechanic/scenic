@@ -29,6 +29,22 @@ module Scenic
 
         expect(definition.path).to eq expected
       end
+      
+      context 'with configured migrations path' do
+        around do |example|
+          Scenic.configure { |config| config.migrations_path = 'test/migrate' }
+          example.run
+          restore_default_config
+        end
+        
+        it "includes the migrations path in the output path"  do
+          expected = "test/views/searches_v01.sql"
+
+          definition = Definition.new("searches", 1)
+
+          expect(definition.path).to eq expected
+        end
+      end
     end
 
     describe "full_path" do
@@ -51,6 +67,10 @@ module Scenic
 
         expect(definition.version).to eq "15"
       end
+    end
+
+    def restore_default_config
+      Scenic.configuration = Configuration.new
     end
   end
 end

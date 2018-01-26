@@ -19,7 +19,7 @@ module Scenic
     end
 
     def path
-      File.join("db", "views", filename)
+      Pathname.new(Scenic.configuration.migrations_path).join('../', 'views', filename).to_s
     end
 
     def version
