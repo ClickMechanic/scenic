@@ -143,7 +143,7 @@ module Scenic
     end
     
     def database
-      config['scenic'] ? Scenic.database(config['scenic']) : Scenic.database
+      @config[:scenic] ? Scenic.database(@config[:scenic]) : Scenic.database
     end
   end
 end
