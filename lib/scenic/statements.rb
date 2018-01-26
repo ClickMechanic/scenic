@@ -149,7 +149,7 @@ module Scenic
     private
 
     def database
-      config['scenic'] ? Scenic.database(config['scenic']) : Scenic.database
+      config[:scenic] ? Scenic.database(config[:scenic]) : Scenic.database
     end
 
     def definition(name, version)
