@@ -41,6 +41,19 @@ module Scenic
         expect(Scenic.database).to eq adapter
       end
     end
+    
+    it "defaults the migrations path to db/migrate" do
+      expect(Scenic.configuration.migrations_path).to eq 'db/migrate'
+    end
+
+    it "allows the migration path to be set" do
+      Scenic.configure do |config|
+        config.migrations_path = 'some/migration/path'
+      end
+
+      expect(Scenic.configuration.migrations_path).to eq 'some/migration/path'
+      expect(Scenic.migrations_path).to eq 'some/migration/path'
+    end
 
     def restore_default_config
       Scenic.configuration = Configuration.new

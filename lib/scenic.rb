@@ -29,4 +29,12 @@ module Scenic
   def self.database(name = nil)
     configuration.database(name)
   end
+  
+  # The current migrations path used by Scenic.
+  #
+  # This defaults to {db/migrate} but can be overridden
+  # via {Configuration}.
+  def self.migrations_path
+    configuration.migrations_path
+  end
 end

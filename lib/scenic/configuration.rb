@@ -5,9 +5,11 @@ module Scenic
     # Defualts to an instance of {Adapters::Postgres}
     # @return Scenic adapter
     attr_writer :database
+    attr_accessor :migrations_path
 
     def initialize
       @database = Scenic::Adapters::Postgres.new
+      @migrations_path = 'db/migrate'
     end
     
     def database(name = nil)
