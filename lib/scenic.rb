@@ -26,7 +26,7 @@ module Scenic
   #
   # This defaults to {Adapters::Postgres} but can be overridden
   # via {Configuration}.
-  def self.database
-    configuration.database
+  def self.database(name = nil)
+    configuration.database(name)
   end
 end
