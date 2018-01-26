@@ -4,10 +4,24 @@ module Scenic
     #
     # Defualts to an instance of {Adapters::Postgres}
     # @return Scenic adapter
-    attr_accessor :database
+    attr_writer :database
 
     def initialize
       @database = Scenic::Adapters::Postgres.new
+    end
+    
+    def database(name = nil)
+      name ? named_databases[name] : @database
+    end
+    
+    def add_database(name, database)
+      named_databases[name] = database
+    end
+    
+    private
+    
+    def named_databases
+      @named_databases ||= {}
     end
   end
 
