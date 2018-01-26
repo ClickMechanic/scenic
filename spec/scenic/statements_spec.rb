@@ -2,9 +2,12 @@ require "spec_helper"
 
 module Scenic
   describe Scenic::Statements do
+    let(:connection) { Class.new { extend Statements } }
+    
     before do
       adapter = instance_double("Scenic::Adapaters::Postgres").as_null_object
       allow(Scenic).to receive(:database).and_return(adapter)
+      allow(connection).to receive(:config).and_return({})
     end
 
     describe "create_view" do
@@ -189,9 +192,23 @@ module Scenic
           .to raise_error(ArgumentError, /version is required/)
       end
     end
-
-    def connection
-      Class.new { extend Statements }
+    
+    context 'with database adapter specified in config' do
+      before do 
+        allow(connection).to receive(:config).and_return({
+          'scenic' => 'test'
+        })
+      end
+      
+      it 'uses the named adapter' do
+        named_adapter = instance_double("Scenic::Adapaters::Named").as_null_object
+        sql_definition = "a defintion"
+        
+        expect(Scenic).to receive(:database).with('test').and_return(named_adapter)
+        connection.create_view(:views, sql_definition: sql_definition)
+        # expect(adapter).to have_received(:create_view)
+          # .with(:name, definition.to_sql)
+      end
     end
   end
 end

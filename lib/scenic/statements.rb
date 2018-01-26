@@ -37,13 +37,13 @@ module Scenic
       sql_definition ||= definition(name, version)
 
       if materialized
-        Scenic.database.create_materialized_view(
+        database.create_materialized_view(
           name,
           sql_definition,
           no_data: no_data(materialized),
         )
       else
-        Scenic.database.create_view(name, sql_definition)
+        database.create_view(name, sql_definition)
       end
     end
 
@@ -62,9 +62,9 @@ module Scenic
     #
     def drop_view(name, revert_to_version: nil, materialized: false)
       if materialized
-        Scenic.database.drop_materialized_view(name)
+        database.drop_materialized_view(name)
       else
-        Scenic.database.drop_view(name)
+        database.drop_view(name)
       end
     end
 
@@ -106,13 +106,13 @@ module Scenic
       sql_definition ||= definition(name, version)
 
       if materialized
-        Scenic.database.update_materialized_view(
+        database.update_materialized_view(
           name,
           sql_definition,
           no_data: no_data(materialized),
         )
       else
-        Scenic.database.update_view(name, sql_definition)
+        database.update_view(name, sql_definition)
       end
     end
 
@@ -143,10 +143,14 @@ module Scenic
 
       sql_definition = definition(name, version)
 
-      Scenic.database.replace_view(name, sql_definition)
+      database.replace_view(name, sql_definition)
     end
 
     private
+
+    def database
+      config['scenic'] ? Scenic.database(config['scenic']) : Scenic.database
+    end
 
     def definition(name, version)
       Scenic::Definition.new(name, version).to_sql
