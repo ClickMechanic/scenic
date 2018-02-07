@@ -34,7 +34,7 @@ module Scenic
   #
   # This defaults to {db/migrate} but can be overridden
   # via {Configuration}.
-  def self.migrations_path
-    configuration.migrations_path
+  def self.migrations_path(name = nil)
+    configuration.migrations_path(name)
   end
 end

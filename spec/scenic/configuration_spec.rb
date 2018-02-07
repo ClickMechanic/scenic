@@ -58,5 +58,28 @@ module Scenic
     def restore_default_config
       Scenic.configuration = Configuration.new
     end
+    
+    
+    describe 'adding a named migrations path' do
+      let(:path) { 'default/path' }
+      let(:named_path) { 'named/migrations/path' }
+      
+      before do
+        Scenic.configure do |config|
+          config.migrations_path = path
+          config.add_migrations_path('test', named_path)
+        end
+      end
+      
+      it 'sets the named migrations path' do
+        expect(Scenic.configuration.migrations_path('test')).to eq named_path
+        expect(Scenic.migrations_path('test')).to eq named_path
+      end
+      
+      it 'still recognizes the default path' do
+        expect(Scenic.configuration.migrations_path).to eq path
+        expect(Scenic.migrations_path).to eq path
+      end
+    end
   end
 end

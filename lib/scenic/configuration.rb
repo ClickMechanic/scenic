@@ -5,7 +5,7 @@ module Scenic
     # Defualts to an instance of {Adapters::Postgres}
     # @return Scenic adapter
     attr_writer :database
-    attr_accessor :migrations_path
+    attr_writer :migrations_path
 
     def initialize
       @database = Scenic::Adapters::Postgres.new
@@ -20,10 +20,22 @@ module Scenic
       named_databases[name] = database
     end
     
+    def migrations_path(name = nil)
+      name ? named_migrations_paths[name] : @migrations_path
+    end
+    
+    def add_migrations_path(name, path)
+      named_migrations_paths[name] = path
+    end
+    
     private
     
     def named_databases
       @named_databases ||= {}
+    end
+    
+    def named_migrations_paths
+      @named_migrations_paths ||= {}
     end
   end
 
