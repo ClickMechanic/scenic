@@ -21,8 +21,16 @@ module Scenic
 
     private
 
+    def connection_config
+      @connection.send(:config)
+    end
+
+    def database
+      Scenic.database(connection_config[:scenic])
+    end
+
     def dumpable_views_in_database
-      @dumpable_views_in_database ||= Scenic.database.views.reject do |view|
+      @dumpable_views_in_database ||= database.views.reject do |view|
         ignored?(view.name)
       end
     end
